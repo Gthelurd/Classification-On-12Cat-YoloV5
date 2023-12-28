@@ -229,7 +229,7 @@ python yolov5/classify/predict.py --source datasets/cat_12_test --weights yolov5
 基本可以看出结果较为完备，训练模型完成。
 | Model | map@0.5 | map@[0.5,0.95] |  params(M)  |  GFLOPs  |
 | :--------: | :--------: | :--------: | :--------: | :--------: |
-| [best.pt]()  |  0.99374 |0.69769 |  70.52   |  16.0  |
+| [best.pt](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/blob/main/weights/best.pt)  |  0.99374 |0.69769 |  70.52   |  16.0  |
 
 ## 5.2分类任务结果
 #### 待更新
