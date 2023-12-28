@@ -1,4 +1,4 @@
-# Classification-On-12Cat-YoloV5
+# Classification-On-12Cat-YoloV5(待更新)
 # 一、项目介绍
 本项目来自于百度飞桨AI官方比赛:[飞桨学习赛：猫十二分类体验赛](https://aistudio.baidu.com/competition/detail/136/0/introduction)。
 
@@ -14,10 +14,10 @@
 | 名称 | 训练集和验证集 | 测试集 |  图像尺寸  |
 | :--------: | :--------: | :--------: | :--------: |
 | [cat_12_train(官方数据集)](https://aistudio.baidu.com/aistudio/datasetDetail/10954)   |  2160     | 240 |  任意尺寸都有  |
-| [cat_12_train_resort]()  |  2159  | - | 任意尺寸都有 |
-| [cat_12_train_result_resize]()  |  2159  | - | [640,640] |
-| [datasets]()  |  2159  | - | [224, 224] |
-| [cat_12_test]()|-|240|任意尺寸都有|
+| [cat_12_train_resort](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_train_resort)  |  2159  | - | 任意尺寸都有 |
+| [cat_12_train_result_resize](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_train_result_resize)  |  2159  | - | [640,640] |
+| [datasets](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/datasets)  |  2159  | - | [224, 224] |
+| [cat_12_test](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_test)|-|240|任意尺寸都有|
 
 官方数据集提供了train_list.txt，其中标注了cat_12_train中的图片类别用于训练。
 ```
@@ -52,13 +52,17 @@ datasets/
 |   |—— cat_11_1.jpg
 |   |—— ...
 ```
-data_txt与data_json都是对于cat_{class}_{index}.jpg的bbox标注(xywh)格式。
+[data_txt](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/data_txt)与[data_json](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/data_json)都是对于cat_{class}_{index}.jpg的bbox标注(xywh)格式。
 
 # 三、模型设计
 ## 3.1 YOLO模型
+#### 3.1.1 网络结构
 我们选择的[YoloV5网络结构](https://blog.csdn.net/nan355655600/article/details/107852288)如下图所示:
 ![](./img/yolov5.png)
 YOLO模型部分绕过卷积网络，可以提高识别准确率。
+#### 3.1.2 不同网络对比
+不难看出，YOLO算法仍然具有一定的优越性。
+![](./img/Different_network.jpg)
 ## 3.2 Code讲解
 Code下放置的都是.py文件，请注意路径的准确性。
 #### 3.2.1 [labels.py]()
@@ -106,7 +110,7 @@ Code下放置的都是.py文件，请注意路径的准确性。
 yolov5中必须将 img_size 设置为 32 的整数倍，也即new_width=new_height=224   (or 640)。
 但是yolo自带源码中的utils/dataset.py中的load_image方法，是将图片的长边缩放到这个img_size大小,而短边是等比例缩放的，也就是会不超过img_size。
 ```
-参考链接:https://blog.csdn.net/sp7414/article/details/116781653
+# 参考链接:https://blog.csdn.net/sp7414/article/details/116781653
 def resize(new_width, new_height, path, save_path):
     for i in glob.glob(path):
         im1 = cv2.imread(i)
@@ -205,7 +209,29 @@ python yolov5/classify/predict.py --source datasets/cat_12_test --weights yolov5
 ```
 # 五、结果评估
 ## 5.1即时检测结果
+#### 5.1.1 混淆矩阵
+在机器学习领域和统计分类问题中，混淆矩阵（英语：confusion matrix）是可视化工具，特别用于监督学习，在无监督学习一般叫做匹配矩阵。矩阵的每一列代表一个类的实例预测，而每一行表示一个实际的类的实例。
+![](./img/confusion_matrix.png)
+可以看出0,3,6,7,9,10,11类别理论上不会识别错误，几乎趋近于1。
+#### 5.1.2 result.csv(部分)
+上升的曲线:
+- Precision：精度(找对的正类/所有找到的正类)
+- Recall：真实为positive的准确率，即正样本召回了多少
+- mAP@0.5:0.95(mAP@[0.5:0.95]):表示在不同IoU阈值(从0.5到0.95，步长0.05)上的平均mAP。
+- mAP@0.5：表示阈值大于0.5的平均mAP
+
+下降的曲线:
+- 定位损失box_loss：预测框与标定框之间的误差（GIoU）
+- 置信度损失obj_loss：计算网络的置信度
+- 分类损失cls_loss：计算锚框与对应的标定分类是否正确
+
+![](./img/result1.png)
+基本可以看出结果较为完备，训练模型完成。
+| Model | map@0.5 | map@[0.5,0.95] |  params(M)  |  GFLOPs  |
+| :--------: | :--------: | :--------: | :--------: | :--------: |
+| [best.pt]()  |  0.99374 |0.69769 |  70.52   |  16.0  |
 
 ## 5.2分类任务结果
+#### 待更新
 # 六、总结
 YOLOV5最新支持的classify任务可以充当分类问题的解决方案，但是检验的效果并不理想，我们需要更进一步地探究如何调整来使预测模型更加准确。同时也可以自己进行进一步的剪枝等操作来获取更加精确的网络结构模型。
