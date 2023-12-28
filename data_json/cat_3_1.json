@@ -1,0 +1,27 @@
+{
+  "version": "5.2.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "cat_3",
+      "points": [
+        [
+          176.0843373493976,
+          9.759036144578312
+        ],
+        [
+          338.73493975903614,
+          166.86746987951804
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "..\\cat_12_train_result\\cat_3_1.jpg",
+  "imageData": null,
+  "imageHeight": 320,
+  "imageWidth": 450
+}
