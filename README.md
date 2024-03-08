@@ -1,23 +1,29 @@
 # Classification-On-12Cat-YoloV5(待更新)
+
+#### 被骂了一通后补充:YOLO适合的是目标检测而不是分类。
 # 一、项目介绍
+## 1.1 项目背景
 本项目来自于百度飞桨AI官方比赛:[飞桨学习赛：猫十二分类体验赛](https://aistudio.baidu.com/competition/detail/136/0/introduction)。
 
 本场比赛要求参赛选手对十二种猫进行分类，属于CV方向经典的图像分类任务。图像分类任务作为其他图像任务的基石，可以让大家更快上手计算机视觉。
 
+## 1.2 项目原理
 众所周知，YOLOv5是一款优秀的目标检测模型，但实际上，它也支持图像分类。在6.1版本中，就暗留了classify这个参数，可以在做检测的同时进行分类。所以我们采用YOLO模型来对这个问题进行处理。
 
 本项目模型代码来自于Yolo-Version代码:[YoloV5 in pytorch](https://github.com/ultralytics/yolov5)。
 
+## 1.3 参考项目
 本项目灵感来源于[ResNet and ViT 在 12 Cat Classification 上的表现](https://github.com/CPones/Classification-12Cat-ResNet-and-ViT)。
 # 二、数据集
+
 本数据集大部分可以用Code中的python代码来实现对官方数据集的操作。
-| 名称 | 训练集和验证集 | 测试集 |  图像尺寸  |
-| :--------: | :--------: | :--------: | :--------: |
-| [cat_12_train(官方数据集)](https://aistudio.baidu.com/aistudio/datasetDetail/10954)   |  2160     | 240 |  任意尺寸都有  |
-| [cat_12_train_resort](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_train_resort)  |  2159  | - | 任意尺寸都有 |
-| [cat_12_train_result_resize](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_train_result_resize)  |  2159  | - | [640,640] |
-| [datasets](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/datasets)  |  2159  | - | [224, 224] |
-| [cat_12_test](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_test)|-|240|任意尺寸都有|
+|                                                             名称                                                              | 训练集和验证集 | 测试集 |   图像尺寸   |
+| :---------------------------------------------------------------------------------------------------------------------------: | :------------: | :----: | :----------: |
+|                      [cat_12_train(官方数据集)](https://aistudio.baidu.com/aistudio/datasetDetail/10954)                      |      2160      |  240   | 任意尺寸都有 |
+|        [cat_12_train_resort](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_train_resort)        |      2159      |   -    | 任意尺寸都有 |
+| [cat_12_train_result_resize](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_train_result_resize) |      2159      |   -    |  [640,640]   |
+|                   [datasets](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/datasets)                   |      2159      |   -    |  [224, 224]  |
+|                [cat_12_test](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/tree/main/cat_12_test)                |       -        |  240   | 任意尺寸都有 |
 
 官方数据集提供了train_list.txt，其中标注了cat_12_train中的图片类别用于训练。
 ```
@@ -34,6 +40,7 @@ dataset/
 |——train_list.txt
 ```
 本数据集datasets是用于YOLO_cls的数据集形式，请注意需要给出(train/test/val)三个文件夹。
+![](./img/train_images.jpg)
 ```
 #datasets数据集目录结构
 datasets/
@@ -208,7 +215,7 @@ python yolov5/detect.py --source datasets/cat_12_test --weights yolov5/runs/trai
 python yolov5/classify/predict.py --source datasets/cat_12_test --weights yolov5/runs/train-cls/exp1/best.pt
 ```
 # 五、结果评估
-## 5.1即时检测结果
+## 5.1 即时检测结果
 #### 5.1.1 混淆矩阵
 在机器学习领域和统计分类问题中，混淆矩阵（英语：confusion matrix）是可视化工具，特别用于监督学习，在无监督学习一般叫做匹配矩阵。矩阵的每一列代表一个类的实例预测，而每一行表示一个实际的类的实例。
 ![](./img/confusion_matrix.png)
@@ -226,12 +233,27 @@ python yolov5/classify/predict.py --source datasets/cat_12_test --weights yolov5
 - 分类损失cls_loss：计算锚框与对应的标定分类是否正确
 
 ![](./img/result1.png)
-基本可以看出结果较为完备，训练模型完成。
-| Model | map@0.5 | map@[0.5,0.95] |  params(M)  |  GFLOPs  |
-| :--------: | :--------: | :--------: | :--------: | :--------: |
-| [best.pt](https://github.com/Gthelurd/Classification-On-12Cat-YoloV5/blob/main/weights/best.pt)  |  0.99374 |0.69769 |  70.52   |  16.0  |
+基本可以看出结果较为完备(正确率约为90%)，训练模型完成。
+|    Model    | map@0.5 | map@[0.5,0.95] | params(M) | GFLOPs |
+| :---------: | :-----: | :------------: | :-------: | :----: |
+| [best.pt]() | 0.99374 |    0.69769     |   70.52   |  16.0  |
 
-## 5.2分类任务结果
-#### 待更新
+## 5.2 分类任务结果
+#### 5.2.1 挺尴尬的过拟合了XDDD
+经过长达数个小时的三百次训练之后，得到了这些图:
+![](img\result_cls.png)
+<!-- ![](img\result2_cls.png) -->
+初步估计训练30~50次即可，过拟合的模型正确率为：34%。
+
+
+
 # 六、总结
-YOLOV5最新支持的classify任务可以充当分类问题的解决方案，但是检验的效果并不理想，我们需要更进一步地探究如何调整来使预测模型更加准确。同时也可以自己进行进一步的剪枝等操作来获取更加精确的网络结构模型。
+YOLOV5支持的classify任务可以充当分类问题的解决方案，但是检验的效果并不理想，我们需要更进一步地探究如何调整来使预测模型更加准确。同时也可以自己进行进一步的剪枝等操作来获取更加精确的网络结构模型。
+
+# 七、一些数据分析以及参考文献
+## 7.1 学习文献
+###### [关于batch_size的大小对于训练模型的影响。](https://arxiv.org/abs/1812.06162)
+###### [江大白的yolov5相关分析讲解。](https://zhuanlan.zhihu.com/p/172121380)
+###### [MMYOLO的yolov5算法原理介绍。](https://mmyolo.readthedocs.io/en/latest/recommended_topics/algorithm_descriptions/yolov5_description.html)
+###### [yolov5软剪枝之代码重构](https://zhuanlan.zhihu.com/p/389568469)
+###### [yolov5软剪枝之算法讲解](https://zhuanlan.zhihu.com/p/391045703)
