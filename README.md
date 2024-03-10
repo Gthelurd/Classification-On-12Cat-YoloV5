@@ -241,7 +241,7 @@ python yolov5/classify/predict.py --source datasets/cat_12_test --weights yolov5
 ## 5.2 分类任务结果
 #### 5.2.1 挺尴尬的过拟合了XDDD
 经过长达数个小时的三百次训练之后，得到了这些图:
-![](./img\result_cls.png)
+![](./img/result_cls.png)
 <!-- ![](img\result2_cls.png) -->
 初步估计训练30~50次即可，过拟合的模型正确率为：34%。
 
