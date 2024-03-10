@@ -234,25 +234,77 @@ python yolov5/classify/predict.py --source datasets/cat_12_test --weights yolov5
 
 ![](./img/result1.png)
 基本可以看出结果较为完备(正确率约为90%)，训练模型完成。
-|    Model    | map@0.5 | map@[0.5,0.95] | params(M) | GFLOPs |
-| :---------: | :-----: | :------------: | :-------: | :----: |
-| [best.pt]() | 0.99374 |    0.69769     |   70.52   |  16.0  |
+|      Model       | map@0.5 | map@[0.5,0.95] | params(M) | GFLOPs |
+| :--------------: | :-----: | :------------: | :-------: | :----: |
+| [best_base.pt]() | 0.99374 |    0.69769     |   70.52   |  16.0  |
 
 ## 5.2 分类任务结果
 #### 5.2.1 挺尴尬的过拟合了XDDD
 经过长达数个小时的三百次训练之后，得到了这些图:
-![](./img/result_cls.png)
+![](./img\result_cls.png)
+<!-- ![](img\result2_cls.png) -->
 初步估计训练30~50次即可，过拟合的模型正确率为：34%。
 
-
-
+#### 5.2.2 补充
+基本可以看出结果较为完备(正确率约为93%)，训练模型完成。
+|      Model      | atop@5  | atop@1  | params(M) | GFLOPs |
+| :-------------: | :-----: | :-----: | :-------: | :----: |
+| [best_cls.pt]() | 0.99954 | 0.69769 |   63.81   |  10.4  |
 # 六、总结
 YOLOV5支持的classify任务可以充当分类问题的解决方案，但是检验的效果并不理想，我们需要更进一步地探究如何调整来使预测模型更加准确。同时也可以自己进行进一步的剪枝等操作来获取更加精确的网络结构模型。
-
-# 七、一些数据分析以及参考文献
+现在YOLO的优势在于部署简单，运行较快；但是识别精度不高，同时是闭集识别。所以以后YOLO的进步方向可能有
+# 七、数据分析以及参考文献
 ## 7.1 学习文献
 ###### [关于batch_size的大小对于训练模型的影响。](https://arxiv.org/abs/1812.06162)
 ###### [江大白的yolov5相关分析讲解。](https://zhuanlan.zhihu.com/p/172121380)
 ###### [MMYOLO的yolov5算法原理介绍。](https://mmyolo.readthedocs.io/en/latest/recommended_topics/algorithm_descriptions/yolov5_description.html)
 ###### [yolov5软剪枝之代码重构](https://zhuanlan.zhihu.com/p/389568469)
 ###### [yolov5软剪枝之算法讲解](https://zhuanlan.zhihu.com/p/391045703)
+## 7.2 数据分析
+
+#### 7.2.1 YOLOV5的分析：
+###### 7.2.1.1 损失函数 | BCE Loss（Binary CrossEntropy Loss）
+BCE主要适用于二分类的任务，而且多标签分类任务可以简单地理解为多个二元分类任务叠加。所以BCE经过简单修改也可以适用于多标签分类任务。
+###### 7.2.1.2 网络结构 |
+
+# 八、相关论文(大概吧)
+[UnitBox: An Advanced Object Detection Network](./doc/1608.01471.pdf)这一篇中的IOU损失。
+[A COMPREHENSIVE REVIEW OF YOLO ARCHITECTURES IN COMPUTER VISION: FROM YOLOV1 TO YOLOV8 AND YOLO-NAS](./doc/2304.00501.pdf)的YOLO网络结构讲解。 
+[细粒度图像分类的深度学习方法](./doc/细粒度图像分类的深度学习方法.pdf)的关于YOLO在细粒度领域的应用。
+[YOLOV9](./doc/2402.13616.pdf)(这篇只是凑个数，YOLOV9很新) 
+[YOLOv3 和双线性特征融合的细粒度图像分类](./doc/create_pdf.pdf)的YOLO在细粒度分类任务的实际应用。
+[Fine-grained Classification of YOLOv5 Remote Sensing Aircraft Targets Incorporating Broad Learning System](./doc/Fine-grained_Classification_of_YOLOv5_Remote_Sensing_Aircraft_Targets_Incorporating_Broad_Learning_System.pdf)的YOLOV5应用于细粒度问题。
+[Statistical Analysis of Design Aspects of Various YOLO-Based Deep Learning Models for Object Detection](./doc/s44196-023-00302-w.pdf)的YOLO网络结构。
+[Research on Fine-Grained Image Recognition of Birds Based on Improved YOLOv5](./doc/sensors-23-08204-v3.pdf)的YOLOV5的一种改进方法。
+# 九、 记录点
+## 9.1 图片
+部分图片采用位深度不同以及像素大小不同(参考reclass与resize)
+
+![](./img/Qt29gPjYZwv3B6RJh5yiTWXrVImue1FH.jpg)
+```
+### 坏道报错
+  File "F:\VSC-code\DeepLearning\FinalProj\YOLO_A\yolov5-master\utils\dataloaders.py", line 308, in __next__
+    assert im0 is not None, f'Image Not Found {path}'
+AssertionError: Image Not Found F:\VSC-code\DeepLearning\Myproj\cat_12_test\Qt29gPjYZwv3B6RJh5yiTWXrVImue1FH.jpg
+```
+## 9.2 自改网络结构
+```
+#### 这个添加到models/common.py中
+class Multi_Conv(nn.Module):
+    # Multi Different Kernel-size Conv
+    def __init__(self, c1, c2, e=1.0):
+        super().__init__()
+        c_ = int(c2 * e)
+        self.cv1 = Conv(c1, c_, 3, 2)
+        self.cv2 = Conv(c1, c_, 7, 2)
+
+    def forward(self, x):
+        return self.cv1(x) + self.cv2(x)
+
+
+#### 这个添加到models/yolo.py中
+if m in {
+        Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv,
+        BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, nn.ConvTranspose2d, DWConvTranspose2d, C3x, Multi_Conv}
+```
+详细请参考[添加注意力机制](https://blog.csdn.net/Mr_Clutch/article/details/119912926)与[修改自己的网络结构](https://blog.csdn.net/qq1198768105/article/details/130170114)。
