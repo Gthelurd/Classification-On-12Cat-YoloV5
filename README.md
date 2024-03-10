@@ -236,7 +236,7 @@ python yolov5/classify/predict.py --source datasets/cat_12_test --weights yolov5
 基本可以看出结果较为完备(正确率约为90%)，训练模型完成。
 |      Model       | map@0.5 | map@[0.5,0.95] | params(M) | GFLOPs |
 | :--------------: | :-----: | :------------: | :-------: | :----: |
-| [best_base.pt]() | 0.99374 |    0.69769     |   70.52   |  16.0  |
+| [best.pt]() | 0.99374 |    0.69769     |   70.52   |  16.0  |
 
 ## 5.2 分类任务结果
 #### 5.2.1 挺尴尬的过拟合了XDDD
