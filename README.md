@@ -308,3 +308,35 @@ if m in {
         BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, nn.ConvTranspose2d, DWConvTranspose2d, C3x, Multi_Conv}
 ```
 详细请参考[添加注意力机制](https://blog.csdn.net/Mr_Clutch/article/details/119912926)与[修改自己的网络结构](https://blog.csdn.net/qq1198768105/article/details/130170114)。
+
+# 十、模型详细效果
+| 模块                                 | 时间 (ms) | GFLOPs | params(M)   |
+| ------------------------------------ | --------- | ------ | ----------- |
+| models.common.Conv                   | 5.47      | 0.73   | 0.026855469 |
+| models.common.Conv                   | 3.95      | 0.96   | 0.141601563 |
+| models.common.C3                     | 12.15     | 0.98   | 0.143554688 |
+| models.common.Conv                   | 3.11      | 0.95   | 0.564453125 |
+| models.common.C3                     | 11.51     | 1.49   | 0.8828125   |
+| models.common.Conv                   | 2.51      | 0.95   | 2.25390625  |
+| models.common.C3                     | 12.11     | 2.01   | 4.76953125  |
+| models.common.Conv                   | 2.30      | 0.95   | 9.0078125   |
+| models.common.C3TR                   | 7.10      | 0.74   | 9.025390625 |
+| models.common.SPPF                   | 6.15      | 0.53   | 5.01171875  |
+| models.common.Conv                   | 0.70      | 0.11   | 1.00390625  |
+| torch.nn.modules.upsampling.Upsample | 0.40      | 0.00   | 0           |
+| models.common.Concat                 | 0.10      | 0.00   | 0           |
+| models.common.C3                     | 6.25      | 1.16   | 2.76171875  |
+| models.common.Conv                   | 0.90      | 0.11   | 0.251953125 |
+| torch.nn.modules.upsampling.Upsample | 0.30      | 0.00   | 0           |
+| models.common.Concat                 | 0.10      | 0.00   | 0           |
+| models.common.C3                     | 8.20      | 1.17   | 0.693359375 |
+| models.common.Multi_Conv             | 4.11      | 1.52   | 3.626953125 |
+| models.common.Concat                 | 0.10      | 0.00   | 0           |
+| models.common.C3                     | 5.90      | 0.90   | 2.13671875  |
+| models.common.Multi_Conv             | 4.20      | 1.52   | 14.50390625 |
+| models.common.Concat                 | 0.00      | 0.00   | 0           |
+| models.common.C3                     | 4.90      | 0.90   | 8.5234375   |
+| Detect                               | 1.80      | 0.15   | 0.34980011  |
+| Total                                | 104.33    | 17.82  | 65.67938995 |
+      
+
