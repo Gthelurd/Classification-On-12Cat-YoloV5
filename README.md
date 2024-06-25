@@ -268,13 +268,21 @@ BCE主要适用于二分类的任务，而且多标签分类任务可以简单�
 ###### 7.2.1.2 网络结构 |
 
 # 八、相关论文(大概吧)
+
 -[UnitBox: An Advanced Object Detection Network](./doc/1608.01471.pdf)这一篇中的IOU损失。
+
 -[A COMPREHENSIVE REVIEW OF YOLO ARCHITECTURES IN COMPUTER VISION: FROM YOLOV1 TO YOLOV8 AND YOLO-NAS](./doc/2304.00501.pdf)的YOLO网络结构讲解。 
+
 -[细粒度图像分类的深度学习方法](./doc/细粒度图像分类的深度学习方法.pdf)的关于YOLO在细粒度领域的应用。
+
 -[YOLOV9](./doc/2402.13616.pdf)(这篇只是凑个数，YOLOV9很新) 
+
 -[YOLOv3 和双线性特征融合的细粒度图像分类](./doc/create_pdf.pdf)的YOLO在细粒度分类任务的实际应用。
+
 -[Fine-grained Classification of YOLOv5 Remote Sensing Aircraft Targets Incorporating Broad Learning System](./doc/Fine-grained_Classification_of_YOLOv5_Remote_Sensing_Aircraft_Targets_Incorporating_Broad_Learning_System.pdf)的YOLOV5应用于细粒度问题。
+
 -[Statistical Analysis of Design Aspects of Various YOLO-Based Deep Learning Models for Object Detection](./doc/s44196-023-00302-w.pdf)的YOLO网络结构。
+
 -[Research on Fine-Grained Image Recognition of Birds Based on Improved YOLOv5](./doc/sensors-23-08204-v3.pdf)的YOLOV5的一种改进方法。
 # 九、 记录点
 ## 9.1 图片
